@@ -1,38 +1,445 @@
-.App {
-  text-align: center;
+@import url('https://fonts.googleapis.com/css2?family=Roboto+Slab:wght@700&display=swap');
+.bg-image{
+    background-image: url('./assets/college.jpg');
+    background-attachment: fixed;
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: cover;
+    min-height:100vh;
+}
+.bg-image1{
+    background-image: url('./assets/college.jpg');
+    background-attachment: fixed;
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: cover;
+    min-height:120vh;
+}
+.login-card{
+    max-width: 500px;
+    margin: 10px auto;
+    background-color: black;
+    border-radius: 10px;
+    padding: 10px;
+    top:60px
+    
+   
+}
+h6{
+    font-size: 20px;
+}
+.profile-card{
+    max-width:500px;
+    margin:10px auto;
+    padding: 20px;
+    
+}
+.signup-card{
+    max-width: 500px;
+    margin: 10px auto;
+    background-color: black;
+    border-radius: 10px;
+    
+    padding-left: 80px;
+    padding-right: 80px;
+
+    padding-bottom: 40px;
+    top:50px
+
 }
 
-.App-logo {
-  height: 40vmin;
+.input{
+    padding: 5px;
+    margin-left: 40px;
+    margin-right: 40px;
+    margin-bottom: 20px;
+
+    padding-left: 30px;
+    font-size: 20px;
+    border: 2px solid #dadada;
+    border-radius: 7px;
+}
+.input:hover{
+    margin-left: 40px;
+    margin-right: 40px;
+    margin-bottom: 20px;
+    border-radius: 7px;
+    padding-left: 30px;
+    font-size: 20px;
+    outline: none;
+    border-color: blue;
+    box-shadow: 0 0 30px blue; 
+}
+label{
+  font-size: 20px;
+}
+.input:focus{
+    
+    margin-left: 40px;
+    margin-right: 40px;
+    margin-bottom: 20px;
+    border-radius: 7px;
+    padding-left: 30px;
+    font-size: 20px;
+    outline: none;
+    border-color: #9ecaed;
+    box-shadow: 0 0 30px #9ecaed;
+    margin-right: 20px;
+}
+.button-main{
+    font-size: 20px;
+   
+}
+.logout-button{
+    font-size: 20px;
+    background-color: red;
+}
+.logout-button:hover{
+    border:2px solid red;
+    background-color: black;
+    color: white;
+    box-shadow: 0 0 30px red;    
+}
+.button-main:hover{
+    border:2px solid black;
+    background-color: black;
+    color: white;
+
+}
+.button-main:focus{
+    border:2px solid blue;
+    background-color: black;
+    color: white;
+
+}
+.input-container {
+    display: -ms-flexbox; /* IE10 */
+    display: flex;
+    width: 100%;
+    font-size: 20px;
+    border-radius: 20px;
+    margin-bottom: 20px;
+
+  }
+  
+  .icon {
+    padding: 20px;
+    
+    color: white;
+    min-width: 50px;
+    text-align: center;
+    border-top-left-radius: 10px;
+    border-bottom-left-radius: 10px;
+  }
+  
+  .input-field {
+    width: 100%;
+    padding: 10px;
+    outline: none;
+    border-top-right-radius:10px ;
+    border-bottom-right-radius: 10px;
+  }
+  .input-field:hover{
+    border-top-right-radius:10px ;
+    border-bottom-right-radius: 10px;
+    border-color: white;
+    box-shadow: 0 0 10px white; 
+  }
+  
+  .input-field:focus {
+    border: 2px solid white;
+  }
+  body{
+    background-color: black;
+}
+.profile-flex{
+    margin-left: 300px;
+    margin-right: 200px;
+    margin-top:80px;
+    
+}
+.top-bar{
+    padding: 10px;
+    margin-top: 60px;
+    display: flex;
+    justify-content: center;
+  
+    border-top-left-radius: 200px;
+    border-bottom-right-radius:200px ;
+}
+.about-content{
+    padding-left: 90px;
+    padding-right: 90px;
+    margin-top: 20px;
+    margin-left:40px;
+   
+}
+.about-content-topic{
+    text-align: left;
+    
+}
+.about-events-card{
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+.about-contact-content{
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+.about-contact-card{
+    margin: 20px;
+}
+.allclubs-card-card{
+    display: flex;
+    justify-content: center;
+    max-width: 800px;
+    margin:10px auto
+}
+.allclubs-card-names{
+    text-align: center;
+}
+.allclubs-card-image{
+    padding-right: 200px;
+}
+.create-post-card{
+  max-width: 700px;
+  margin: 10px auto;
+}
+.table-card{
+  max-width: 1000px;
+  margin:10px auto;
+  font-size: 24px;
+}
+.test{
+  display: none;
+}
+table {
+  color:'white';
+  font-family: arial, sans-serif;
+  border-collapse: collapse;
+  width: 100%;
+}
+tr{
+  color:'white';
+}
+td, th {
+
+  border: 0px solid #dddddd;
+  text-align: left;
+  padding: 8px;
+}
+.download-button{
+  background-color: #9ecaed;
+  color:'white'
+}
+
+  @media only screen and (max-width: 600px) {
+    .test{
+      max-width: 500px;
+      min-width:300px;
+      margin:10px auto;
+      display: block;
+    }
+    .table-card{
+      display: none;
+    }
+    .allclubs-card-image{
+        padding-right: 0px;
+    }
+    
+    .allclubs-card-card{
+        display: flex;
+        justify-content: center;
+        flex-direction: column;
+    }
+    .about-events-card{
+        display: flex;
+        justify-content: center;
+        flex-direction: column;
+        flex-wrap: unset;
+        
+    }
+    .about-content{
+        padding-left: 0px;
+        padding-right: 0px;
+        margin-top: 20px;
+        margin-left:00px;
+    }
+    .about-content-topic{
+        text-align: center;
+    }
+
+    .top-bar{
+        flex-direction: column;
+        border-top-left-radius: 0;
+        border-bottom-left-radius: 30px;
+        border-bottom-right-radius:30px ;
+    }
+    body{
+        background-color: black;
+    }
+    .signup-card{
+        max-width: 500px;
+        margin: 10px auto;
+        background-color: black;
+        border-radius: 10px;
+        
+        padding-left: 30px;
+        padding-right: 30px;
+    
+        padding-bottom: 40px;
+        top:50px
+    
+    }
+    .bg-image{
+        background-image: url('./assets/black.jpg');
+        background-attachment: fixed;
+        background-repeat: no-repeat;
+        background-position: center;
+        background-size: cover;
+        min-height:100vh;
+    }
+    .profile-flex{
+        margin-left: 0px;
+        margin-right: 0px;
+        margin-top:80px;
+      
+    }
+    .bg-image1{
+        background-image: url('./assets/black.jpg');
+        background-attachment: fixed;
+        background-repeat: no-repeat;
+        background-position: center;
+        background-size: cover;
+        min-height:120vh;
+    }
+  }
+
+/*err page*/
+@import 'https://fonts.googleapis.com/css?family=Inconsolata';
+
+html {
+  min-height: 100%;
+}
+
+.body {
+  box-sizing: border-box;
+  height: 100%;
+  background-color: #000000;
+  background-image: radial-gradient(#11581E, #041607), url("https://media.giphy.com/media/oEI9uBYSzLpBK/giphy.gif");
+  background-repeat: no-repeat;
+  background-size: cover;
+  font-family: 'Inconsolata', Helvetica, sans-serif;
+  font-size: 1.5rem;
+  color: rgba(128, 255, 128, 0.8);
+  text-shadow:
+      0 0 1ex rgba(51, 255, 51, 1),
+      0 0 2px rgba(255, 255, 255, 0.8);
+}
+
+.noise {
   pointer-events: none;
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  background-image: url("https://media.giphy.com/media/oEI9uBYSzLpBK/giphy.gif");
+  background-repeat: no-repeat;
+  background-size: cover;
+  z-index: -1;
+  opacity: .02;
 }
 
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
+.overlay {
+  pointer-events: none;
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  background:
+      repeating-linear-gradient(
+      180deg,
+      rgba(0, 0, 0, 0) 0,
+      rgba(0, 0, 0, 0.3) 50%,
+      rgba(0, 0, 0, 0) 100%);
+  background-size: auto 4px;
+  z-index: 1;
 }
 
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
+.overlay::before {
+  content: "";
+  pointer-events: none;
+  position: absolute;
+  display: block;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  width: 100%;
+  height: 100%;
+  background-image: linear-gradient(
+      0deg,
+      transparent 0%,
+      rgba(32, 128, 32, 0.2) 2%,
+      rgba(32, 128, 32, 0.8) 3%,
+      rgba(32, 128, 32, 0.2) 3%,
+      transparent 100%);
+  background-repeat: no-repeat;
+  animation: scan 7.5s linear 0s infinite;
+}
+
+@keyframes scan {
+  0%        { background-position: 0 -100vh; }
+  35%, 100% { background-position: 0 100vh; }
+}
+
+.terminal {
+  box-sizing: inherit;
+  position: absolute;
+  height: 100%;
+  width: 1000px;
+  max-width: 100%;
+  padding: 4rem;
+  text-transform: uppercase;
+}
+
+.output {
+  color: rgba(128, 255, 128, 0.8);
+  text-shadow:
+      0 0 1px rgba(51, 255, 51, 0.4),
+      0 0 2px rgba(255, 255, 255, 0.8);
+}
+
+.output::before {
+  content: "> ";
+}
+
+/*
+.input {
+  color: rgba(192, 255, 192, 0.8);
+  text-shadow:
+      0 0 1px rgba(51, 255, 51, 0.4),
+      0 0 2px rgba(255, 255, 255, 0.8);
+}
+
+.input::before {
+  content: "$ ";
+}
+*/
+/*
+a {
+  color: #fff;
+  text-decoration: none;
+}
+
+a::before {
+  content: "[";
+}
+
+a::after {
+  content: "]";
+}
+
+.errorcode {
   color: white;
-}
-
-.App-link {
-  color: #61dafb;
-}
-
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
-}
+}*/
