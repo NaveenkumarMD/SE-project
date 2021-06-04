@@ -1,6 +1,6 @@
 import './App.css';
-import React from 'react'
-import {Switch, Route,BrowserRouter, Link} from 'react-router-dom'
+import React, { useEffect ,} from 'react'
+import {Switch, Route,BrowserRouter, Link,useHistory} from 'react-router-dom'
 import Login from './Components/Login'
 import Signup from './Components/Signup'
 import { Provider } from 'react-redux';
@@ -14,23 +14,27 @@ import Allclubs from './Components/Allclubs';
 import Adminlogin from './Components/Adminlogin'
 import Createpost from './Components/Createpost';
 import Adminview from './Components/Adminview';
-import AddToHomescreen from 'react-add-to-homescreen';
-if (!firebase.apps.length) {
-  firebase.initializeApp(firebaseConfig)
-}else {
-  firebase.app()
-  firebase.analytics()
-}
+import Home from './Components/Home'
+import Aboutus from './Components/Aboutus'
+
+
+setTimeout(() => {
+  if (!firebase.apps.length) {
+    firebase.initializeApp(firebaseConfig)
+  }else {
+    firebase.app()
+    firebase.analytics()
+  } 
+}, 1000);
 var colors = ['red', 'green', 'blue', 'orange', 'indigo','#877FE0','tomato','violet','purple']
 sessionStorage.setItem("color",colors[Math.floor(Math.random() * colors.length)])
 const Routing=()=>{
   return(
     <BrowserRouter>
       <Switch>
-        
         <Route exact path="/">
-          <Login/>
-        </Route>
+          <Home/>
+        </Route>     
         <Route exact path="/Adminlogin">
           <Adminlogin />
         </Route>
@@ -58,7 +62,13 @@ const Routing=()=>{
         <Route exact path="/Aboutclub/:name/:contest">
           <Adminview/>
         </Route>
-        
+        <Route exact path="/Aboutus">
+          <Aboutus/>
+        </Route>
+        <Route exact path="/Err">
+          <Errpage/>
+        </Route>
+        <Route component={Errpage}/>
      </Switch>
      </BrowserRouter>
   )
@@ -66,20 +76,51 @@ const Routing=()=>{
 class App extends React.Component{
   constructor(props){
     super(props)
-
+    this.state={
+      isloading:false
+    }
   }
+  componentDidMount=async()=>{
 
+    firebase.firestore().collection('clubs').get().then(async doc=>{
+      var array=[]
+      await doc.forEach(dat=>{
+     
+        array.push(dat.data())
+      })
+      var user=localStorage.getItem('user')
+      if(user){
+        localStorage.setItem('allclubs',JSON.stringify(array))
+      }
+      
+      
+    })
+  }
    render(){
-    return(
+     if(!this.state.isloading){
+      return(
+        <Provider store={store}>
+          <Routing/>
+        </Provider>
+      )
 
-      <Provider store={store}>
-        
-        <Routing/>
-      </Provider>
-    )
+     }
+     else{
+      return(
+        <div className="body">
+        <div className="noise"></div>
+        <div className="overlay"></div>
+        <div className="terminal">
+          <h1><span className="errorcode">Loading....</span></h1>
+
+        </div>
+      </div>
+      )
+    }
+
   }
 }
-const errpage=()=>{
+const Errpage=()=>{
   return(
     <div className="body">
       <div class="noise"></div>

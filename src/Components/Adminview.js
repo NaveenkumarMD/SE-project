@@ -11,40 +11,64 @@ class Adminview extends Component {
             color:'',
             participants:[0],
             blur:'blur(40px)',
+            loading:true,
             data:[{
-              "name":'naveen'
+              "name":'None'
             }]
         }
     }
     async componentDidMount(){
-        var {clubname,contestname}=this.props.match.params
-        this.setState({clubname,contestname})
-        var color=sessionStorage.getItem('color')
-        this.setState({color})
+      var color=sessionStorage.getItem('color')
+      this.setState({color})
+      var user=localStorage.getItem('user')
+      if(!user){
+        this.props.history.push("/Login")
+      }
+      console.log(this.props.match.params)
+      const { name,contest}=this.props.match.params
+      console.log(name)
+      var array=[]
+      await firebase.firestore().collection('clubs').doc(name).get().then(doc=>{
+        var data=doc.data()
+        //console.log(data)
+        for (var i =0;i<data.events.length;i++){
+         // console.log(contest)
+          if(data.events[i].title==contest){
+            
+            array=array.concat(data.events[i].participants)
+     
+          }
+        }
+      })
+      console.log((array))
+      var array1=[];
       
-        await firebase.firestore().collection('clubs').doc(this.props.match.params.name).onSnapshot(async doc=>{
-       
-          await doc.data().events.forEach(async data=>{
-            if(data.title===this.props.match.params.contest){
-             
-              firebase.firestore().collection('users').where("regno","in",[1905097,1905098,1905113]).get().then(async doc=>{
-                var array=[]
-                await doc.forEach(dot=>{
-                
-                  array.push(dot.data())
-                })
-                this.setState({data:array,blur:'none'})
-              })
-              this.setState((prev,action)=>{
-               
-                return({
-                  participants:data.participants,
-                  
-                })
-              })
-            }
+      if(array[0]==undefined){
+        
+        return this.setState({
+          blur:'none',
+          loading:false
+        })
+      }
+      await firebase.firestore().collection('users').where('regno','in',array).get().then(query=>{
+        query.forEach(doc=>{
+          console.log(doc.data())
+          var data=doc.data()
+          array1.push({
+            name:data.name,
+            mobile:data.mobile,
+            year:data.year,
+            department:data.department,
+            regno:data.regno,
           })
         })
+      })
+      this.setState({
+        data:array1,
+        blur:'none',
+        loading:false
+      })
+             
 
     }
     render() {
@@ -74,15 +98,20 @@ class Adminview extends Component {
            </tr>
          )
         })
+        if(this.state.loading){
+          return(
+            <h1 style={{color:'white'}}>Loading...</h1>
+          )
+        }
         return (
 
             <div>
               <Navbar/>
              
               
-                <div className="card table-card" style={{marginTop:'90px',color:'white',backgroundColor:'black'}}>
+                <div className="card table-card" style={{marginTop:'90px',color:'white',backgroundColor:'rgb(18, 18, 18)'}}>
                   <h2 style={{textAlign:'center',marginBottom:'20px'}}>Contestants</h2> 
-                  <table style={{top:'120px' ,backgroundColor:this.state.color,borderRadius:'2px',filter:this.state.blur}} id="table-to-xls">
+                  <table style={{top:'120px' ,backgroundColor:'rgb(18,18,18)',borderRadius:'2px',filter:this.state.blur}} id="table-to-xls">
                     <tr>
                       <th>S.No</th>
                       <th>Name</th>
@@ -105,7 +134,7 @@ class Adminview extends Component {
                 </div>
                 <div style={{color:'white',marginTop:'90px'}} className="test">
                   <h2 style={{textAlign:'center',paddingBottom:'40px'}}>Contestants </h2>
-                <table style={{backgroundColor:this.state.color,borderRadius:'2px',filter:this.state.blur}}>
+                <table style={{backgroundColor:'rgb(18,18,18)',borderRadius:'20px',filter:this.state.blur}}>
                   <tr>
                     <th>S no</th>
                     <th>name</th>
@@ -130,7 +159,7 @@ class Adminview extends Component {
 }
 const Navbar=()=>{
     return(
-        <nav class="navbar navbar-expand-lg navbar-dark fixed-top" style={{backgroundColor:'black'}}>
+        <nav class="navbar navbar-expand-lg navbar-dark fixed-top" style={{backgroundColor:'black',borderRadius:'20px'}}>
         <a class="navbar-brand" href="#" style={{color:'white'}}>Clubs</a>
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarText" aria-controls="navbarText" aria-expanded="false" aria-label="Toggle navigation">
           <span class="navbar-toggler-icon"></span>
@@ -138,12 +167,13 @@ const Navbar=()=>{
         <div class="collapse navbar-collapse" id="navbarText">
           <ul class="navbar-nav mr-auto">
             <li class="nav-item active">
-              <a class="nav-link" href="#">Home <span class="sr-only">(current)</span></a>
+              
+              <Link class="nav-link" to="/Aboutus">About  us </Link>
             </li>
 
           </ul>
           <span class="navbar-text">
-              <Link to="/Allclubs">All clubs</Link>
+              <Link to="/Aboutclub">About</Link>
 
           </span>
         </div>

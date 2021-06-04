@@ -89,13 +89,13 @@ class Signup extends React.Component{
   <div class="collapse navbar-collapse" id="navbarText">
     <ul class="navbar-nav mr-auto">
       <li class="nav-item active">
-        <a class="nav-link" href="#">Home <span class="sr-only">(current)</span></a>
+      <Link class="nav-link" to="/Aboutus">About  us </Link>
       </li>
 
     </ul>
     <span class="navbar-text">
-        <Link to="/Login">Login</Link>
-     
+        <Link to="/Login" style={{marginRight:'10px'}}>Login</Link>
+        <Link to="/Adminlogin">Admin Login</Link>
     </span>
   </div>
 </nav>

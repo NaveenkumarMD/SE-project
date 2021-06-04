@@ -3,11 +3,15 @@ import {Link,withRouter} from 'react-router-dom'
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import firebase from 'firebase'
+import {v1 as uuid} from 'uuid'
+import {SkewLoader,ClimbingBoxLoader, MoonLoader} from 'react-spinners'
+var storage=firebase.storage()
 class Createpost extends Component {
     constructor(props){
         super(props)
         
         this.state={
+            image:'',
             color:'',
             eventname:'',
             time:'',
@@ -16,7 +20,8 @@ class Createpost extends Component {
             chiefguest:'',
             description:'',
             contact:'',
-            club:''
+            club:'',
+            loading:false
         }
     }
     componentWillMount(){
@@ -24,6 +29,10 @@ class Createpost extends Component {
         this.setState({color:color})
     }
     async componentDidMount(){
+        var user=localStorage.getItem('user')
+        if(!user){
+          this.props.history.push("/Login")
+        }
        var issec=await JSON.parse(localStorage.getItem('user'))
        if(!issec.secretaryof){
         return this.props.history.push("/Error")
@@ -37,38 +46,113 @@ class Createpost extends Component {
             [e.target.name]:e.target.value
         })
     }
-    addevent=(e)=>{
-        console.log("rin")
+    fileevent=(e)=>{
+        console.log(e.target.files[0])
+        this.setState({
+            image:e.target.files[0]
+        })
+    }
+    addevent=async (e)=>{
+        
          e.preventDefault()
-       // if(!this.state.eventname){
-       //     toast.error("Please enter event name")
-       // }
-       // if(!this.state.date || this.state.time){
-       //     toast.error("Please mention time and date")
-       // }
-       // if(!this.state.venue){
-       //     toast.error("Please mention venue")
-       // }
-        const dataref=firebase.firestore().collection('clubs').doc(this.state.club)
-        dataref.update({
-            events: firebase.firestore.FieldValue.arrayUnion({
-                eventname:this.state.eventname,
-                time:this.state.time,
-                date:firebase.firestore.Timestamp.fromDate(new Date(this.state.date)),
-                chiefguest:this.state.chiefguest,
-                venue:this.state.venue,
-                url:'hjfewjwfgreg',
-                description:this.state.description,
-                contact:this.state.contact
-            })
-        },{merge:true})
+         
+         if(!this.state.eventname){
+            return toast.error("Please enter event name")
+        }
+        if(!this.state.date || !this.state.time){
+            return toast.error("Please mention time and date")
+        }
+        if(!this.state.venue){
+            return toast.error("Please mention venue")
+        }
+     if(this.state.image===''){
+         return alert("Image not found")
+     }
+     const uploadtask=storage.ref(`/images/${uuid()+this.state.image.name}`).put(this.state.image)
+     uploadtask.on(firebase.storage.TaskEvent.STATE_CHANGED, // or 'state_changed'
+     (snapshot) => {
+      this.setState({loading:true})
+       // Get task progress, including the number of bytes uploaded and the total number of bytes to be uploaded
+       var progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+       console.log('Upload is ' + progress + '% done');
+       switch (snapshot.state) {
+         case firebase.storage.TaskState.PAUSED: // or 'paused'
+           console.log('Upload is paused');
+           break;
+         case firebase.storage.TaskState.RUNNING: // or 'running'
+           console.log('Upload is running');
+           break;
+       }
+     }, 
+     (error) => {
+       // A full list of error codes is available at
+       // https://firebase.google.com/docs/storage/web/handle-errors
+       switch (error.code) {
+         case 'storage/unauthorized':
+           // User doesn't have permission to access the object
+           break;
+         case 'storage/canceled':
+           // User canceled the upload
+           break;
+   
+         // ...
+   
+         case 'storage/unknown':
+           // Unknown error occurred, inspect error.serverResponse
+           break;
+       }
+     }, 
+     () => {
+       // Upload completed successfully, now we can get the download URL
+       uploadtask.snapshot.ref.getDownloadURL().then((downloadURL) => {
+         console.log('File available at', downloadURL);
+         const dataref=firebase.firestore().collection('clubs').doc(this.state.club)
+         dataref.update({
+             events: firebase.firestore.FieldValue.arrayUnion({
+                 title:this.state.eventname,
+                 time:this.state.time,
+                 date:this.state.date,
+                 chiefguest:this.state.chiefguest,
+                 venue:this.state.venue,
+                 url:downloadURL,
+                 description:this.state.description,
+                 contact:this.state.contact,
+                 participants:[],
+             })
+         },{merge:true}).then(data=>{
+           this.setState({loading:false})
+          this.props.history.push("/")
+         })
+       });
+     }
+   );
+
+
+
+
 
     }
     render() {
+        if(this.state.loading){
+          return(
+            <div class="wrapper" style={{textAlign:'center'}}>
+              <div style={{position:'absolute',top:'50%',left:'50%',textAlign:'center'}}>
+              <ClimbingBoxLoader  color="rgb(15,233,188,100)" size={20}/>
+              </div>
+            
+        </div>
+
+            )
+        }
         return (
+
             <div>
+
+
+
                 <ToastContainer hideProgressBar/>
                 <Navbar />
+
               <div className="card create-post-card" style={{padding:'50px',marginTop:'px',backgroundColor:'black',color:'white'}}>
                   <h1 style={{textAlign:'center',marginBottom:'20px'}}>Add event</h1>
                   <div>
@@ -81,6 +165,7 @@ class Createpost extends Component {
                         <label for="text">Time:</label>
                         <input type="time" class="form-control" id="text" name="time" value={this.state.time} onChange={this.inputhandler} />
                     </div>
+
                     <div class="form-group">
                         <label for="text">Date:</label>
                         <input type="date" class="form-control" id="text" name="date" value={this.state.date} onChange={this.inputhandler} />
@@ -103,7 +188,7 @@ class Createpost extends Component {
                     </div>
                     <div class="form-group">
                         <label for="text">Poster:</label>
-                        <input type="file" class="form-control" id="text" />
+                        <input type="file" class="form-control" id="text" onChange={this.fileevent} />
                     </div>
 
                     <div style={{textAlign:'center'}}> 
@@ -126,7 +211,7 @@ const Navbar=()=>{
         <div class="collapse navbar-collapse" id="navbarText">
           <ul class="navbar-nav mr-auto">
             <li class="nav-item active">
-              <a class="nav-link" href="#">Home <span class="sr-only">(current)</span></a>
+              <a class="nav-link" href="#">About  us <span class="sr-only">(current)</span></a>
             </li>
       
           </ul>

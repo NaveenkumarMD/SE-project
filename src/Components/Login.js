@@ -9,6 +9,7 @@ import {postinglogindata} from '../Actions/Actions'
 import ContactMailIcon from '@material-ui/icons/ContactMail';
 import {SyncLoader} from 'react-spinners'
 import { css } from "@emotion/core";
+import firebase from 'firebase'
 const override = css`
   display: block;
   margin: 0 auto;
@@ -36,13 +37,27 @@ class Login extends React.Component{
         var color=sessionStorage.getItem("color")
         this.setState({color:color})
     }
-    componentWillReceiveProps(nextprops){
+    async componentWillReceiveProps(nextprops){
+
         this.setState({loading:false,blur:'none'})
         if(nextprops.user){
             if(nextprops.user.message){
               return toast.error(nextprops.user.message)
             }
-            this.props.history.push("/Profile")
+            await firebase.firestore().collection('clubs').get().then(async doc=>{
+                var array=[]
+                await doc.forEach(dat=>{
+               
+                  array.push(dat.data())
+                })
+                var user=localStorage.getItem('user')
+                if(user){
+                  localStorage.setItem('allclubs',JSON.stringify(array))
+                }
+                
+                
+              })
+            this.props.history.push("/")
 
         }
 
@@ -68,25 +83,7 @@ class Login extends React.Component{
         return(
             <div>
 
-               <nav class="navbar navbar-expand-lg navbar-dark fixed-top" style={{backgroundColor:'black'}}>
-  <a class="navbar-brand" href="#" style={{color:'white'}}>Clubs</a>
-  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarText" aria-controls="navbarText" aria-expanded="false" aria-label="Toggle navigation">
-    <span class="navbar-toggler-icon"></span>
-  </button>
-  <div class="collapse navbar-collapse" id="navbarText">
-    <ul class="navbar-nav mr-auto">
-      <li class="nav-item active">
-        <a class="nav-link" href="#">Home <span class="sr-only">(current)</span></a>
-      </li>
-
-    </ul>
-    <span class="navbar-text" style={{marginLeft:'5px'}}>
-        <Link to="/Signup">Signup</Link>
-        <Link  style={{marginLeft:'10px'}} to="/Adminlogin">Admin</Link>
-     
-    </span>
-  </div>
-</nav>
+               <Navbar/>
            <div className="bg-imae" style={{justifyContent:'center'}}>
 
                <ToastContainer hideProgressBar/>
@@ -134,6 +131,28 @@ class Login extends React.Component{
 Login.proptype={
     postinglogindata:PropTypes.func.isRequired
 
+}
+const Navbar=(props)=>{
+    return(
+        <nav class="navbar navbar-expand-lg navbar-dark fixed-top" style={{backgroundColor:'black'}}>
+            <a class="navbar-brand" href="#" style={{color:'white'}}>Clubs</a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarText" aria-controls="navbarText" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarText">
+                <ul class="navbar-nav mr-auto">
+                <li class="nav-item active">
+                <Link class="nav-link" to="/Aboutus">About  us </Link>
+                </li>
+
+                </ul>
+                <span class="navbar-text">
+                    <Link to="/Signup" style={{marginRight:'10px'}}>Signup</Link>
+                    <Link to="/Adminlogin">Adminlogin</Link>
+                </span>
+            </div>
+            </nav>
+    )
 }
 export default compose(
     withRouter,

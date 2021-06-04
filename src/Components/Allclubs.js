@@ -10,7 +10,7 @@ class Allclubs extends Component {
     constructor(props){
         super(props)
         this.state={
-            color:'',
+            color:'rgb(18, 18, 18)',
             blur:'blur(5px)',
             data:[]
         }
@@ -23,9 +23,18 @@ class Allclubs extends Component {
         })
       }
     }
-    componentDidMount(){
+    async componentDidMount(){
+      var user=localStorage.getItem('user')
+      if(!user){
+        this.props.history.push("/Login")
+      }
         this.props.getclubs()
-        this.setState({color:sessionStorage.getItem('color')})
+        //this.setState({color:sessionStorage.getItem('color')})
+        var dat=await JSON.parse(localStorage.getItem('allclubs'))
+        this.setState({
+          data:dat,
+          blur:'none'
+        })
     }
     render() {
       const data=this.state.data.map(data=>{
@@ -33,7 +42,7 @@ class Allclubs extends Component {
         return(
             <div className=" allclubs-card-card" style={{filter:this.state.blur,color:'white',textAlign:'center',backgroundColor:this.state.color,padding:'10px',marginBottom:'2px'}}>
                 <div className="allclubs-card-image" >
-                    <img  style={{height:'120px',width:"120px",marginBottom:'20px',marginTop:'30px',marginBottom:'30px'}} src="https://upload.wikimedia.org/wikipedia/en/1/17/Coimbatore_Institute_of_Technology_logo.png"/>
+                    <img  style={{height:'120px',width:"120px",marginBottom:'10px',marginTop:'30px',marginBottom:'30px'}} src="https://upload.wikimedia.org/wikipedia/en/1/17/Coimbatore_Institute_of_Technology_logo.png"/>
                 </div>
                 <div style={{marginTop:'20px'}} className="allclubs-card-names">
                     <h3>{data.name}</h3>
@@ -74,7 +83,7 @@ const Navbar=()=>{
         <div class="collapse navbar-collapse" id="navbarText">
           <ul class="navbar-nav mr-auto">
             <li class="nav-item active">
-              <a class="nav-link" href="#">Home <span class="sr-only">(current)</span></a>
+            <Link class="nav-link" to="/Aboutus">About  us </Link>
             </li>
 
           </ul>

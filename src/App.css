@@ -15,6 +15,9 @@
     background-size: cover;
     min-height:120vh;
 }
+.show-all-events-head:hover{
+  text-decoration: underline;
+}
 .login-card{
     max-width: 500px;
     margin: 10px auto;
@@ -73,19 +76,7 @@ h6{
 label{
   font-size: 20px;
 }
-.input:focus{
-    
-    margin-left: 40px;
-    margin-right: 40px;
-    margin-bottom: 20px;
-    border-radius: 7px;
-    padding-left: 30px;
-    font-size: 20px;
-    outline: none;
-    border-color: #9ecaed;
-    box-shadow: 0 0 30px #9ecaed;
-    margin-right: 20px;
-}
+
 .button-main{
     font-size: 20px;
    
@@ -107,7 +98,7 @@ label{
 
 }
 .button-main:focus{
-    border:2px solid blue;
+    border:2px solid black;
     background-color: black;
     color: white;
 
@@ -193,15 +184,17 @@ label{
 }
 .allclubs-card-card{
     display: flex;
-    justify-content: center;
+    justify-content: space-between;
     max-width: 800px;
     margin:10px auto
 }
 .allclubs-card-names{
+  margin-right: 100px;
     text-align: center;
 }
 .allclubs-card-image{
     padding-right: 200px;
+    margin-left: 100px;
 }
 .create-post-card{
   max-width: 700px;
@@ -231,11 +224,21 @@ td, th {
   padding: 8px;
 }
 .download-button{
-  background-color: #9ecaed;
-  color:'white'
+  background-color: rgb(18,18,18);
+  color: white;
+ 
+  font-size: 18px;
+}
+.home-card{
+  margin:10px auto;
+}
+.Edit-button:hover{
+  text-decoration: underline;
+  pointer-events: stroke;
 }
 
   @media only screen and (max-width: 600px) {
+
     .test{
       max-width: 500px;
       min-width:300px;
@@ -260,6 +263,13 @@ td, th {
         flex-direction: column;
         flex-wrap: unset;
         
+    }
+    .allclubs-card-names{
+      margin-right: 00px;
+        text-align: center;
+    }
+    .allclubs-card-image{
+        margin-left: 00px;
     }
     .about-content{
         padding-left: 0px;

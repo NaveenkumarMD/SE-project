@@ -9,6 +9,7 @@ import {postingadminlogindata} from '../Actions/Actions'
 import ContactMailIcon from '@material-ui/icons/ContactMail';
 import {SyncLoader} from 'react-spinners'
 import { css } from "@emotion/core";
+import firebase from 'firebase'
 const override = css`
   display: block;
   margin: 0 auto;
@@ -36,13 +37,26 @@ class Adminlogin extends React.Component{
         var color=sessionStorage.getItem("color")
         this.setState({color:color})
     }
-    componentWillReceiveProps(nextprops){
+    async componentWillReceiveProps(nextprops){
         this.setState({loading:false,blur:'none'})
         console.log(nextprops.user.secretaryof)
         if(nextprops.user){
             if(nextprops.user.message){
               return toast.error(nextprops.user.message)
             }
+            await firebase.firestore().collection('clubs').get().then(async doc=>{
+                var array=[]
+                await doc.forEach(dat=>{
+               
+                  array.push(dat.data())
+                })
+                var user=localStorage.getItem('user')
+                if(user){
+                  localStorage.setItem('allclubs',JSON.stringify(array))
+                }
+                
+                
+              })
         this.props.history.push({
             pathname:`/Aboutclub/${nextprops.user.secretaryof}`,
 
@@ -80,7 +94,7 @@ class Adminlogin extends React.Component{
   <div class="collapse navbar-collapse" id="navbarText">
     <ul class="navbar-nav mr-auto">
       <li class="nav-item active">
-        <a class="nav-link" href="#">Home <span class="sr-only">(current)</span></a>
+      <Link class="nav-link" to="/Aboutus">About  us </Link>
       </li>
 
     </ul>
